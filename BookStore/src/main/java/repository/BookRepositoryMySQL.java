@@ -36,7 +36,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public Optional<Book> findById(Long id) {
-        Book book = new Book();
+        //Book book = new Book();
 
         String sql = " SELECT * FROM book" +
                 " WHERE id = ?";
@@ -45,14 +45,14 @@ public class BookRepositoryMySQL implements BookRepository{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-
-            book = getBookFromResultSet(resultSet);
+            if(resultSet.next())
+                return Optional.ofNullable(getBookFromResultSet(resultSet));
 
 
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return Optional.ofNullable(book);
+        return Optional.empty();
     }
 
     @Override
@@ -63,7 +63,8 @@ public class BookRepositoryMySQL implements BookRepository{
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
-            statement.setDate(3, (java.sql.Date) Date.from(book.getPublishedDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            statement.setDate(3, Date.valueOf(book.getPublishedDate()));
+            statement.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();
             return false;
@@ -74,10 +75,12 @@ public class BookRepositoryMySQL implements BookRepository{
     @Override
     public void removeAll() {
         String sql = " DELETE FROM book;";
+        String rst_inc = " ALTER TABLE book AUTO_INCREMENT = 1";
         try{
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery(sql);
+            statement.executeUpdate(sql);
+            statement.executeUpdate(rst_inc);
         }catch (SQLException e){
             e.printStackTrace();
         }

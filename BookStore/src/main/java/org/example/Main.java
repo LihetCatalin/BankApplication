@@ -26,9 +26,9 @@ public class Main {
         System.out.println(book);
         System.out.println(bookRepository.findAll());
         System.out.println(bookRepository.save(book));
-        System.out.println(bookRepository.findById(1L));
+        System.out.println(bookRepository.findById(15L));
         System.out.println(bookRepository.findAll());
-        bookRepository.removeAll();
+        //bookRepository.removeAll();
         System.out.println(bookRepository.findAll());
     }
 }

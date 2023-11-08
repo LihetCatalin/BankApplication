@@ -39,4 +39,8 @@ public class Book {
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
     }
+
+    public String toString(){
+        return "[Book : "+ this.id + ", " + this.author + ", " + this.title + ", " + this.publishedDate+ "]";
+    }
 }

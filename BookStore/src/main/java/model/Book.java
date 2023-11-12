@@ -41,6 +41,6 @@ public class Book {
     }
 
     public String toString(){
-        return "[Book : "+ this.id + ", " + this.author + ", " + this.title + ", " + this.publishedDate+ "]";
+        return String.format("Id = %d, Author = %s, Title = %s, Date = %s", id, author, title, publishedDate);
     }
 }

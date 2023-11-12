@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="BookRepositoryMySQLTesting" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-11-08T08:38:02" hostname="DESKTOP-D4G4I3F" time="0.093">
+<testsuite name="BookRepositoryMySQLTesting" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-11-12T15:29:41" hostname="DESKTOP-D4G4I3F" time="0.101">
   <properties/>
-  <testcase name="saveTest()" classname="BookRepositoryMySQLTesting" time="0.038"/>
-  <testcase name="findByIdTest()" classname="BookRepositoryMySQLTesting" time="0.031"/>
+  <testcase name="saveTest()" classname="BookRepositoryMySQLTesting" time="0.051"/>
+  <testcase name="findAllTest()" classname="BookRepositoryMySQLTesting" time="0.01"/>
+  <testcase name="removeAllTest()" classname="BookRepositoryMySQLTesting" time="0.007"/>
+  <testcase name="findByIdTest()" classname="BookRepositoryMySQLTesting" time="0.028"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

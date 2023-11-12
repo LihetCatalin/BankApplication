@@ -1,12 +1,16 @@
 package model.builder;
+import model.AudioBook;
 import model.Book;
+import model.EBook;
+import model.PhysicalBook;
+
 import java.time.LocalDate;
-import java.util.Date;
-public class BookBuilder {
+
+public class BookBuilder implements BookBuilder_I{
     private Book book;
 
-    public BookBuilder(){
-        book = new Book();
+    public BookBuilder(Book book){
+        this.book = book;
     }
 
     public BookBuilder setId(Long id){
@@ -26,6 +30,20 @@ public class BookBuilder {
 
     public BookBuilder setPublishedDate(LocalDate publishedDate){
         book.setPublishedDate(publishedDate);
+        return this;
+    }
+
+    public BookBuilder setFormat(String format){
+        if(book instanceof EBook){
+            ((EBook) book).setFormat(format);
+        }
+        return this;
+    }
+
+    public BookBuilder setRunTime(int runTime){
+        if(book instanceof AudioBook){
+            ((AudioBook) book).setRunTime(runTime);
+        }
         return this;
     }
 

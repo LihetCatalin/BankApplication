@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public class Book {
+public abstract class Book {
     private Long id;
     private String author;
     private String title;

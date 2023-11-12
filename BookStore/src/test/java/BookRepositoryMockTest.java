@@ -1,4 +1,5 @@
 import model.Book;
+import model.PhysicalBook;
 import model.builder.BookBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class BookRepositoryMockTest {
     }
     @Test
     public void save(){
-        Book book = new BookBuilder()
+        Book book = new BookBuilder(new PhysicalBook())
                 .setAuthor("Author")
                 .setTitle("Title")
                 .build();

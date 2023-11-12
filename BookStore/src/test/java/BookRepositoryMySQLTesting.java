@@ -1,4 +1,5 @@
 import database.DatabaseConnectionFactory;
+import model.PhysicalBook;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import repository.Cache;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookRepositoryMySQLTesting {
-    private Book book = new BookBuilder()
+    private Book book = new BookBuilder(new PhysicalBook())
             .setId(1L)
             .setTitle("Harry Potter")
             .setAuthor("J.K. Rowling")
@@ -35,7 +36,7 @@ public class BookRepositoryMySQLTesting {
     }
     @Test
     public void findAllTest(){
-
+        assertEquals(0, bookRepository.findAll().size());
     }
     @Test
     public void findByIdTest(){

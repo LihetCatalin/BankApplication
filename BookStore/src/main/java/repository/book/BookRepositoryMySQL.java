@@ -1,4 +1,4 @@
-package repository;
+package repository.book;
 
 import model.AudioBook;
 import model.Book;

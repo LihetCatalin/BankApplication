@@ -6,7 +6,10 @@ import model.Book;
 import model.EBook;
 import model.PhysicalBook;
 import model.builder.BookBuilder;
-import repository.*;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryCacheDecorator;
+import repository.book.BookRepositoryMySQL;
+import repository.book.Cache;
 import service.BookService;
 import service.BookServiceImpl;
 
@@ -54,6 +57,8 @@ public class Main {
         bookService.save(audioBook);
 
         System.out.println(bookService.findAll());
+        System.out.println(bookService.findById(1L));
+        System.out.println(bookService.getAgeOfBook(1L));
 
         //System.out.println(bookService.findAll());
         //System.out.println(bookService.findAll());

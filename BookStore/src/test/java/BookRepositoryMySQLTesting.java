@@ -8,10 +8,10 @@ import model.builder.BookBuilder;
 
 import java.time.LocalDate;
 
-import repository.BookRepository;
-import repository.BookRepositoryCacheDecorator;
-import repository.BookRepositoryMySQL;
-import repository.Cache;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryCacheDecorator;
+import repository.book.BookRepositoryMySQL;
+import repository.book.Cache;
 
 import static org.junit.jupiter.api.Assertions.*;
 

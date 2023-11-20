@@ -1,12 +1,11 @@
 package service;
 
 import model.Book;
-import repository.BookRepository;
+import repository.book.BookRepository;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 public class BookServiceImpl implements BookService {
     final BookRepository bookRepository;

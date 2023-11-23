@@ -1,66 +1,49 @@
-
-
+import controller.LoginController;
 import database.DatabaseConnectionFactory;
-import model.AudioBook;
+import database.JDBConnectionWrapper;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import model.Book;
-import model.EBook;
-import model.PhysicalBook;
 import model.builder.BookBuilder;
+import model.validator.UserValidator;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryCacheDecorator;
 import repository.book.BookRepositoryMySQL;
 import repository.book.Cache;
-import service.BookService;
-import service.BookServiceImpl;
+import repository.security.RightsRolesRepository;
+import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.book.BookService;
+import service.book.BookServiceImpl;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceMySQL;
+import view.LoginView;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 
-public class Main {
-    public static void main(String[] args) {
+import static database.Constants.Schemas.PRODUCTION;
 
-        BookRepository bookRepository = new BookRepositoryCacheDecorator(
-                new BookRepositoryMySQL(DatabaseConnectionFactory.getConnectionWrapper(true).getConnection()),
-                new Cache<>()
-        );
+public class Main extends Application {
+    public static void main(String[] args){
+        launch(args);
+    }
 
-        BookService bookService = new BookServiceImpl(bookRepository);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        final Connection connection = new JDBConnectionWrapper(PRODUCTION).getConnection();
 
-        Book book = new BookBuilder(new PhysicalBook())
-                .setTitle("Harry Potter")
-                .setAuthor("J.K. Rowling")
-                .setPublishedDate(LocalDate.of(2010, 7, 3))
-                .setFormat("pdf")
-                .setRunTime(200)
-                .build();
+        final RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
+        final UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
 
-        Book eBook = new BookBuilder(new EBook())
-                .setTitle("Harry Potter")
-                .setAuthor("J.K. Rowling")
-                .setPublishedDate(LocalDate.of(2010, 7, 3))
-                .setFormat("pdf")
-                .setRunTime(200)
-                .build();
+        final AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository,
+                rightsRolesRepository);
 
-        Book audioBook = new BookBuilder(new AudioBook())
-                .setTitle("Harry Potter")
-                .setAuthor("J.K. Rowling")
-                .setPublishedDate(LocalDate.of(2010, 7, 3))
-                .setFormat("pdf")
-                .setRunTime(200)
-                .build();
+        final LoginView loginView = new LoginView(primaryStage);
 
-        System.out.println(book);
-        bookRepository.removeAll();  //nu am removeAll in bookService, nu stiu daca trebuie adaugat
+        final UserValidator userValidator = new UserValidator(userRepository);
 
-        bookService.save(book);
-        bookService.save(eBook);
-        bookService.save(audioBook);
-
-        System.out.println(bookService.findAll());
-        System.out.println(bookService.findById(1L));
-        System.out.println(bookService.getAgeOfBook(1L));
-
-        //System.out.println(bookService.findAll());
-        //System.out.println(bookService.findAll());
+        new LoginController(loginView, authenticationService, userValidator);
     }
 }

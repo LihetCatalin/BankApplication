@@ -7,6 +7,8 @@ public abstract class Book {
     private String author;
     private String title;
     private LocalDate publishedDate;
+    private int price;
+    private int stock;
 
     public Long getId() {
         return id;
@@ -38,6 +40,22 @@ public abstract class Book {
 
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public String toString(){

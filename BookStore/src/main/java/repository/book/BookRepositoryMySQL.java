@@ -59,27 +59,29 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public boolean save(Book book) {
-        String sql = " INSERT INTO book (title, author, publishedDate, bookType, format, runTime)" +
-                " VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = " INSERT INTO book (title, author, publishedDate, price, stock, bookType, format, runTime)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try{
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setDate(3, Date.valueOf(book.getPublishedDate()));
+            statement.setInt(4, book.getPrice());
+            statement.setInt(5, book.getStock());
 
             if (book instanceof AudioBook) {
-                statement.setString(4, "audioBook");
-                statement.setNull(5, Types.VARCHAR);
-                statement.setInt(6, ((AudioBook) book).getRunTime());
+                statement.setString(6, "audioBook");
+                statement.setNull(7, Types.VARCHAR);
+                statement.setInt(8, ((AudioBook) book).getRunTime());
             } else if (book instanceof EBook) {
-                statement.setString(4, "eBook");
-                statement.setString(5, ((EBook) book).getFormat());
-                statement.setNull(6, Types.INTEGER);
+                statement.setString(6, "eBook");
+                statement.setString(7, ((EBook) book).getFormat());
+                statement.setNull(8, Types.INTEGER);
             } else {
-                statement.setString(4, "normal book");
-                statement.setNull(5, Types.VARCHAR);
-                statement.setNull(6, Types.INTEGER);
+                statement.setString(6, "normal book");
+                statement.setNull(7, Types.VARCHAR);
+                statement.setNull(8, Types.INTEGER);
             }
             statement.executeUpdate();
         }catch(SQLException e){
@@ -121,6 +123,8 @@ public class BookRepositoryMySQL implements BookRepository{
                 .setTitle(resultSet.getString("title"))
                 .setAuthor(resultSet.getString("author"))
                 .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
+                .setPrice(resultSet.getInt("price"))
+                .setStock(resultSet.getInt("stock"))
                 .setFormat(resultSet.getString("format"))
                 .setRunTime(resultSet.getInt("runTime"))
                 .build();

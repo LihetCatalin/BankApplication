@@ -8,6 +8,8 @@ public class SQLTableCreationFactory {
                     " author varchar(500) NOT NULL," +
                     " title varchar(500) NOT NULL," +
                     " publishedDate datetime DEFAULT NULL," +
+                    " price int NOT NULL, " +
+                    " stock int NOT NULL DEFAULT 0," +
                     " bookType varchar(500) NOT NULL," +
                     " format varchar(500) DEFAULT NULL," +
                     " runTime int DEFAULT NULL," +

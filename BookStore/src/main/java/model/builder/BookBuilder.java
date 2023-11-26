@@ -33,6 +33,16 @@ public class BookBuilder implements BookBuilder_I{
         return this;
     }
 
+    public BookBuilder setPrice(int price){
+        book.setPrice(price);
+        return this;
+    }
+
+    public BookBuilder setStock(int stock){
+        book.setStock(stock);
+        return this;
+    }
+
     public BookBuilder setFormat(String format){
         if(book instanceof EBook){
             ((EBook) book).setFormat(format);

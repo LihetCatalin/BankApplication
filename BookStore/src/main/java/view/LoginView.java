@@ -62,7 +62,7 @@ public class LoginView {
         userTextField = new TextField();
         gridPane.add(userTextField, 1, 1);
 
-        Label password = new Label("Password");
+        Label password = new Label("Password:");
         gridPane.add(password, 0, 2);
 
         passwordField = new PasswordField();

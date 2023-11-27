@@ -91,6 +91,25 @@ public class BookRepositoryMySQL implements BookRepository{
         return true;
     }
 
+    public boolean updateStock(Book b){
+        String sql = "UPDATE book" +
+                " SET stock = ?" +
+                " WHERE id = ?";
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, b.getStock());
+            preparedStatement.setLong(2, b.getId());
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void removeAll() {
         String sql = " DELETE FROM book;";

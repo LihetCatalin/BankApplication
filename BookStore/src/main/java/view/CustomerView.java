@@ -1,5 +1,6 @@
 package view;
 
+import javafx.scene.control.SelectionMode;
 import model.Book;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,8 +20,11 @@ import javafx.scene.text.Text;
 public class CustomerView {
     private Button goBackButton;
     private Button viewBooksButton;
-    private Button buyBookButton;
+    private Button addBooksToCartButton;
+    private Button clearCartButton;
+    private Button buyBooksButton;
     private TableView tableView;
+    private Text shoppingCartText;
     private Text actionText;
 
     public CustomerView(Stage customerStage){
@@ -59,11 +63,23 @@ public class CustomerView {
         viewBooksButton = new Button("View Books");
         gridPane.add(viewBooksButton, 0, 1, 1, 1);
 
-        buyBookButton = new Button("Buy Book");
-        gridPane.add(buyBookButton, 0, 2, 1, 1);
+        addBooksToCartButton = new Button("Add books to cart");
+        gridPane.add(addBooksToCartButton, 0, 2, 1, 1);
+
+        clearCartButton = new Button("Clear shopping cart");
+        gridPane.add(clearCartButton, 0, 10, 1, 1);
+
+        buyBooksButton = new Button("Buy Books");
+        gridPane.add(buyBooksButton, 0, 9, 1, 1);
 
         actionText = new Text();
         gridPane.add(actionText, 0, 5);
+
+        Text cartText = new Text("Shopping cart:");
+        gridPane.add(cartText, 0, 6);
+
+        shoppingCartText = new Text();
+        gridPane.add(shoppingCartText, 0, 7);
 
         initializeTable();
 
@@ -88,6 +104,7 @@ public class CustomerView {
         stockCol.setCellValueFactory(new PropertyValueFactory<Book, String>("stock"));
 
         tableView = new TableView<>();
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.getColumns().addAll(authorCol, titleCol, publishedDateCol,
                 priceCol, stockCol);
     }
@@ -96,18 +113,29 @@ public class CustomerView {
         return tableView;
     }
 
-    public Text getActionText(){
-        return actionText;
+    public String getActionText(){
+        return actionText.getText();
     }
 
     public void setActionText(String text){
         actionText.setText(text);
     }
+
+    public void setShoppingCartText(String text){shoppingCartText.setText(text);}
+    public String getShoppingCartText(){return shoppingCartText.getText();}
     public void addViewBooksButtonListener(EventHandler<ActionEvent> viewBooksButtonListener){
         viewBooksButton.setOnAction(viewBooksButtonListener);
     }
 
     public void addBuyBooksButtonListener(EventHandler<ActionEvent> buyBooksButtonListener){
-        buyBookButton.setOnAction(buyBooksButtonListener);
+        buyBooksButton.setOnAction(buyBooksButtonListener);
+    }
+
+    public void addAddBookToCartButtonListener(EventHandler<ActionEvent> addBookToCartButtonListener){
+        addBooksToCartButton.setOnAction(addBookToCartButtonListener);
+    }
+
+    public void addClearCartButtonListener(EventHandler<ActionEvent> clearCartButtonListener){
+        clearCartButton.setOnAction(clearCartButtonListener);
     }
 }

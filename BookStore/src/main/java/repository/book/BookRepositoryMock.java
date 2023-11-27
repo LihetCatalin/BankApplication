@@ -31,6 +31,11 @@ public class BookRepositoryMock implements BookRepository{
     }
 
     @Override
+    public boolean updateStock(Book book) {
+        return false; //NOT IMPLEMENTED YET
+    }
+
+    @Override
     public void removeAll() {
         books.clear();
     }

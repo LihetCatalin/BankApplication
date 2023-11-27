@@ -31,6 +31,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public boolean updateStock(Book book, int decrement) {
+        if(book.getStock() - decrement < 0)return false;
+        else{
+            book.setStock(book.getStock() - decrement);
+            return bookRepository.updateStock(book);
+        }
+    }
+
+    @Override
     public int getAgeOfBook(Long id) {
         Book book = this.findById(id);
         LocalDate now = LocalDate.now();

@@ -2,11 +2,13 @@ package model;
 
 import java.time.LocalDate;
 
-public class Book {
+public abstract class Book {
     private Long id;
     private String author;
     private String title;
     private LocalDate publishedDate;
+    private int price;
+    private int stock;
 
     public Long getId() {
         return id;
@@ -40,7 +42,23 @@ public class Book {
         this.publishedDate = publishedDate;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
     public String toString(){
-        return "[Book : "+ this.id + ", " + this.author + ", " + this.title + ", " + this.publishedDate+ "]";
+        return String.format("Id = %d, Author = %s, Title = %s, Date = %s", id, author, title, publishedDate);
     }
 }

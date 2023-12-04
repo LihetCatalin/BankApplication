@@ -164,8 +164,26 @@ public class Bootstrap {
                     .setStock(150)
                     .build();
 
+            Book book3 = new BookBuilder(new PhysicalBook())
+                    .setAuthor("R.J. Palacio")
+                    .setTitle("Minunea")
+                    .setPublishedDate(LocalDate.of(2012, Month.APRIL, 1))
+                    .setPrice(48)
+                    .setStock(500)
+                    .build();
+
+            Book book4 = new BookBuilder(new PhysicalBook())
+                    .setAuthor("Liz Pichon")
+                    .setTitle("Tom Gates")
+                    .setPublishedDate(LocalDate.of(2011, Month.APRIL, 1))
+                    .setPrice(29)
+                    .setStock(550)
+                    .build();
+
             bookRepository.save(book1);
             bookRepository.save(book2);
+            bookRepository.save(book3);
+            bookRepository.save(book4);
         }
     }
 }

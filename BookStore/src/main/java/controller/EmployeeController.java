@@ -4,13 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.text.Font;
 import model.Book;
 import model.PhysicalBook;
 import model.builder.BookBuilder;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import service.book.BookService;
 import view.EmployeeView;
-import org.apache.pdfbox.pdmodel;
+import org.apache.pdfbox.pdmodel.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -100,6 +105,28 @@ public class EmployeeController {
             bookService.updateStock(selectedBook, 1);
             employeeView.getTableView().refresh();
 
+            PDDocument doc = new PDDocument();
+            PDPage page1 = new PDPage();
+            doc.addPage(page1);
+            try {
+                PDPageContentStream contentStream = new PDPageContentStream(doc, page1);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(20, 450);
+                contentStream.setFont(PDType1Font.TIMES_ROMAN , 20);
+                contentStream.showText("AJUTOR");
+                contentStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                doc.save("C:/documente de pe spatiul de lucru/" +
+                        "facultate/anul 3/semestrul 1/IS/BookStoreApplication/soldBooks");
+                System.out.println("PDF TIME");
+                doc.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

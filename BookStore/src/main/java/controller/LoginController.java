@@ -1,6 +1,7 @@
 package controller;
 
 import database.DatabaseConnectionFactory;
+import database.Constants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -14,8 +15,10 @@ import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.user.AuthenticationService;
 import view.CustomerView;
+import view.EmployeeView;
 import view.LoginView;
 
+import javax.xml.crypto.Data;
 import java.util.EventListener;
 import java.util.List;
 
@@ -48,7 +51,11 @@ public class LoginController {
                 loginView.setActionTargetText("Invalid Username or password!");
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
-                openCustomerWindow();
+                switch (user.getRoles().get(0).getRole()) {
+                    case Constants.Roles.ADMINISTRATOR -> openAdminWindow();
+                    case Constants.Roles.EMPLOYEE -> openEmployeeWindow();
+                    default -> openCustomerWindow();
+                }
             }
 
         }
@@ -62,6 +69,21 @@ public class LoginController {
             );
             BookService bookService = new BookServiceImpl(bookRepository);
             new CustomerController(customerView, bookService);
+        }
+
+        private void openEmployeeWindow(){
+            Stage employeeStage = new Stage();
+            EmployeeView employeeView = new EmployeeView(employeeStage);
+            BookRepository bookRepository = new BookRepositoryCacheDecorator(
+                    new BookRepositoryMySQL(DatabaseConnectionFactory.getConnectionWrapper(false).getConnection()),
+                    new Cache<>()
+            );
+            BookService bookService = new BookServiceImpl(bookRepository);
+            new EmployeeController(employeeView, bookService);
+        }
+
+        private void openAdminWindow(){
+
         }
     }
 

@@ -12,12 +12,12 @@ import java.util.Collections;
 
 import static database.Constants.Roles.CUSTOMER;
 
-public class AuthenticationServiceMySQL implements AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
 
-    public AuthenticationServiceMySQL(UserRepository userRepository, RightsRolesRepository rightsRolesRepository) {
+    public AuthenticationServiceImpl(UserRepository userRepository, RightsRolesRepository rightsRolesRepository) {
         this.userRepository = userRepository;
         this.rightsRolesRepository = rightsRolesRepository;
     }
@@ -35,6 +35,11 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
                 .setRoles(Collections.singletonList(customerRole))
                 .build();
 
+        return userRepository.save(user);
+    }
+
+    public boolean saveUser(User user){
+        user.setPassword(hashPassword(user.getPassword()));
         return userRepository.save(user);
     }
 

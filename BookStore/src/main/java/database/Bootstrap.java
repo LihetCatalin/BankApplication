@@ -1,6 +1,7 @@
 package database;
 
 import model.builder.BookBuilder;
+import model.builder.UserBuilder;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryCacheDecorator;
 import repository.book.BookRepositoryMySQL;
@@ -8,6 +9,8 @@ import repository.book.Cache;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,6 +26,10 @@ import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 
 import model.*;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceImpl;
 
 // Script - code that automates some steps or processes
 
@@ -30,6 +37,7 @@ public class Bootstrap {
 
     private static RightsRolesRepository rightsRolesRepository;
     private static BookRepository bookRepository;
+    private static UserRepository userRepository;
 
     public static void main(String[] args) throws SQLException {
         dropAll();
@@ -98,6 +106,7 @@ public class Bootstrap {
 
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
             rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
+            userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(), rightsRolesRepository);
 
             bootstrapRoles();
             bootstrapRights();
@@ -133,7 +142,30 @@ public class Bootstrap {
     }
 
     private static void bootstrapUserRoles() throws SQLException {
+        List<Role> custRoles = Arrays.asList(rightsRolesRepository.findRoleByTitle(Constants.Roles.CUSTOMER));
+        List<Role> emplRoles = Arrays.asList(rightsRolesRepository.findRoleByTitle(Constants.Roles.EMPLOYEE));
+        List<Role> adminRoles = Arrays.asList(rightsRolesRepository.findRoleByTitle(Constants.Roles.ADMINISTRATOR));
+        User customer1 = new UserBuilder()
+                .setUsername("user1@gmail.com")
+                .setPassword(hashPassword("abcdefgh123*"))
+                .setRoles(custRoles)
+                .build();
 
+        User employee1 = new UserBuilder()
+                .setUsername("employee1@gmail.com")
+                .setPassword(hashPassword("randompass123*"))
+                .setRoles(emplRoles)
+                .build();
+
+        User admin1 = new UserBuilder()
+                .setUsername("bestAdmin@gmail.com")
+                .setPassword(hashPassword("adminadmin123*"))
+                .setRoles(adminRoles)
+                .build();
+
+        userRepository.save(customer1);
+        userRepository.save(employee1);
+        userRepository.save(admin1);
     }
 
     private static void bootstrapBooks() throws  SQLException{
@@ -184,6 +216,27 @@ public class Bootstrap {
             bookRepository.save(book2);
             bookRepository.save(book3);
             bookRepository.save(book4);
+        }
+    }
+
+    private static String hashPassword(String password) {
+        try {
+            // Sercured Hash Algorithm - 256
+            // 1 byte = 8 biți
+            // 1 byte = 1 char
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
 }

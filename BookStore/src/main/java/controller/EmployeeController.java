@@ -18,15 +18,18 @@ import org.apache.pdfbox.pdmodel.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeController {
     private final EmployeeView employeeView;
     private final BookService bookService;
+    private List<Book> soldBooks;
 
     public EmployeeController(EmployeeView employeeView, BookService bookService){
         this.employeeView = employeeView;
         this.bookService = bookService;
+        soldBooks = new ArrayList<>();
 
         this.employeeView.addCreateBookButtonListener(new CreateBookButtonListener());
         this.employeeView.addRetrieveBooksButtonListener(new RetrieveBooksButtonListener());
@@ -77,6 +80,7 @@ public class EmployeeController {
                     .build();
 
             bookService.updateBook(bookToUpdate.getId(), updatedBook);
+            employeeView.getTableView().refresh();
             List<Book> books = bookService.findAll();
             ObservableList<Book> data = FXCollections.observableList(books);
             employeeView.getTableView().setItems(data);
@@ -104,6 +108,8 @@ public class EmployeeController {
                     .getSelectedItem();
             bookService.updateStock(selectedBook, 1);
             employeeView.getTableView().refresh();
+            soldBooks.add(selectedBook);
+
 
             PDDocument doc = new PDDocument();
             PDPage page1 = new PDPage();
@@ -111,9 +117,14 @@ public class EmployeeController {
             try {
                 PDPageContentStream contentStream = new PDPageContentStream(doc, page1);
                 contentStream.beginText();
-                contentStream.newLineAtOffset(20, 450);
-                contentStream.setFont(PDType1Font.TIMES_ROMAN , 20);
-                contentStream.showText("AJUTOR");
+                contentStream.setFont(PDType1Font.TIMES_ROMAN , 12);
+                contentStream.newLineAtOffset(20, 700);
+                contentStream.setLeading(15);
+                for (Book b : soldBooks) {
+                    contentStream.showText(b.getTitle() + " " + b.getAuthor() + " ");
+                    contentStream.newLine();
+                }
+                contentStream.endText();
                 contentStream.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);

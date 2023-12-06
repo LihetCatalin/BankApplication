@@ -111,6 +111,40 @@ public class BookRepositoryMySQL implements BookRepository{
     }
 
     @Override
+    public boolean updateBook(Long idBook, Book updatedBook) {
+        String sql = "UPDATE book" +
+                " SET author = ?, title = ?, price = ?, stock = ?"+
+                " WHERE id = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, updatedBook.getAuthor());
+            statement.setString(2, updatedBook.getTitle());
+            statement.setInt(3, updatedBook.getPrice());
+            statement.setInt(4, updatedBook.getStock());
+            statement.setLong(5, idBook);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return  true;
+    }
+
+    @Override
+    public boolean removeById(Long id) {
+        String sql = "DELETE FROM book WHERE id = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void removeAll() {
         String sql = " DELETE FROM book;";
         String rst_inc = " ALTER TABLE book AUTO_INCREMENT = 1";

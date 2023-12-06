@@ -40,6 +40,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public boolean updateBook(Long idBook, Book updatedBook) {
+        return bookRepository.updateBook(idBook, updatedBook);
+    }
+
+    public boolean deleteBook(Book book){
+        return bookRepository.removeById(book.getId());
+    }
+
+    @Override
     public int getAgeOfBook(Long id) {
         Book book = this.findById(id);
         LocalDate now = LocalDate.now();

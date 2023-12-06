@@ -36,6 +36,16 @@ public class BookRepositoryMock implements BookRepository{
     }
 
     @Override
+    public boolean updateBook(Long idBook, Book updatedBook) {
+        return false; //NOT IMPLEMENTED YET
+    }
+
+    @Override
+    public boolean removeById(Long id) {
+        return false; //NOT IMPLEMENTED
+    }
+
+    @Override
     public void removeAll() {
         books.clear();
     }
